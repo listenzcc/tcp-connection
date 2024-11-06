@@ -1,0 +1,11 @@
+IP:
+  # host: "localhost"
+  host: "172.18.116.146"
+  port: 8888
+  clientsLimit: 5
+
+TCP:
+  encoding: utf-8
+  # The 8 refers encoding body length int into 8 digits hex
+  # like, 0x12345678
+  codeLengthOfBodyLength: 8

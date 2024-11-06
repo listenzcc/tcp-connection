@@ -58,12 +58,12 @@ class MyServer(object):
             raise ConnectionResetError
 
         # Deal with echo package
-        if h.startswith(b'0a'):
+        if h.startswith(b'0e'):
             n = int(b'0x'+h[2:], 16)
             ts = conn.recv(n)
             tsr = ts + b',' + str(t_recv).encode(config.TCP.encoding)
             n = len(tsr)
-            head = '0x{0:0{1}X}'.format(
+            head = '0e{0:0{1}X}'.format(
                 n, config.TCP.codeLengthOfBodyLength).encode(config.TCP.encoding)
             conn.send(head+tsr)
             logger.debug(f'Received echo packet and sent back: {ts} -> {tsr}')

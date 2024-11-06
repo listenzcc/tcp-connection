@@ -64,17 +64,18 @@ class MyClient(object):
         t_send = time.time()
         ts = str(t_send).encode(config.TCP.encoding)
         n = len(ts)
-        head = '0a{0:0{1}X}'.format(
+        head = '0e{0:0{1}X}'.format(
             n, config.TCP.codeLengthOfBodyLength).encode(config.TCP.encoding)
         self.socket.send(head+ts)
 
         h = self.socket.recv(config.TCP.codeLengthOfBodyLength+2)
         t_recv = time.time()
-        n = int(h, 16)
+        if not h.startswith(b'0e'):
+            raise ValueError(f'Invalid received data: {h}')
+
+        n = int(b'0x'+h[2:], 16)
         tsr = self.socket.recv(n)
-
         offset = float(tsr.split(b',')[1]) - float(tsr.split(b',')[0])
-
         return t_recv - t_send, tsr, offset
 
     def _receive(self):
